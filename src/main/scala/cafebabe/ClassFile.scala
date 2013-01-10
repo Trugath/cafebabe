@@ -28,12 +28,14 @@ class ClassFile(val className: String, parentName: Option[String] = None) extend
 
   private var fields: List[FieldInfo] = Nil
   private var methods: List[MethodInfo] = Nil
-
-  // TODO
-  private var interfacesCount: U2 = 0
-  private var interfaces: List[U1] = Nil
-
+  private var interfaces: List[InterfaceInfo] = Nil
   private var attributes : List[AttributeInfo] = Nil
+
+  def addInterface(name: String) {
+    val nameIndex = constantPool.addClass(constantPool.addString(name))
+
+    interfaces = InterfaceInfo(name, nameIndex) :: interfaces
+  }
 
   private var _srcNameWasSet = false
   /** Attaches the name of the original source file to the class file. */
@@ -45,6 +47,12 @@ class ClassFile(val className: String, parentName: Option[String] = None) extend
     val idx = constantPool.addString(sf)
     attributes = SourceFileAttributeInfo(sourceFileNameIndex, idx) :: attributes
   }
+
+  /** Sets the access flags for the class. */
+  def setFlags(flags : U2) : Unit = { accessFlags = flags }
+
+  /** Returns the currently set flags. */
+  def getFlags : U2 = accessFlags
 
   /** Adds a field to the class, using the default flags and no attributes. */
   def addField(tpe: String, name: String): FieldHandler = {
@@ -60,14 +68,17 @@ class ClassFile(val className: String, parentName: Option[String] = None) extend
   def addMethod(retTpe: String, name: String, args: String*): MethodHandler = addMethod(retTpe,name,args.toList)
 
   def addMethod(retTpe: String, name: String, args: List[String]): MethodHandler = {
+    val concatArgs = args.mkString("")
+
     val accessFlags: U2 = defaultMethodAccessFlags
     val nameIndex: U2 = constantPool.addString(name)
-    val descriptorIndex: U2 = constantPool.addString(args.toList.mkString("(", "", ")") + retTpe)
+    val descriptorIndex: U2 = constantPool.addString(
+      "(" + concatArgs + ")" + retTpe
+    )
     val code = CodeAttributeInfo(codeNameIndex)
     val inf = MethodInfo(accessFlags, nameIndex, descriptorIndex, List(code))
     methods = methods ::: (inf :: Nil)
 
-    val concatArgs = args.mkString("")
 
     new MethodHandler(inf, code, constantPool, concatArgs)
   }
@@ -79,42 +90,47 @@ class ClassFile(val className: String, parentName: Option[String] = None) extend
     handler
   }
 
-  /** Adds a default constructor. */
-  def addDefaultConstructor: MethodHandler = {
-    val accessFlags: U2 = Flags.METHOD_ACC_PUBLIC
-    val nameIndex: U2 = constantPool.addString(constructorName)
-    val descriptorIndex: U2 = constantPool.addString(constructorSig)
+  /** Adds a constructor to the class. Constructor code should always start by invoking a constructor from the super class. */
+  def addConstructor(args : String*) : MethodHandler = addConstructor(args.toList)
+
+  def addConstructor(args : List[String]) : MethodHandler = {
+    val concatArgs = args.mkString("")
+
+    val accessFlags : U2 = Flags.METHOD_ACC_PUBLIC
+    val nameIndex : U2 = constantPool.addString(constructorName)
+    val descriptorIndex : U2 = constantPool.addString(
+      "(" + concatArgs + ")V"
+    )
     val code = CodeAttributeInfo(codeNameIndex)
     val inf = MethodInfo(accessFlags, nameIndex, descriptorIndex, List(code))
     methods = methods ::: (inf :: Nil)
-    val mh = new MethodHandler(inf, code, constantPool, "")
+    val mh = new MethodHandler(inf, code, constantPool, concatArgs)
+    mh
+  }
 
+  /** Adds a default constructor. */
+  def addDefaultConstructor: MethodHandler = {
     import ByteCodes._
     import AbstractByteCodes._
 
+    val mh = addConstructor(Nil)
     mh.codeHandler << ALOAD_0
-    mh.codeHandler << InvokeSpecial(superClassName, constructorName, constructorSig)
+    mh.codeHandler << InvokeSpecial(superClassName, constructorName, "()V")
     mh.codeHandler << RETURN
     mh.codeHandler.freeze
     mh
   }
 
   /** Writes the binary representation of this class file to a file. */
-  def writeToFile(fileName : String) : Unit = {
+  def writeToFile(fileName : String) {
     // The stream we'll ultimately use to write the class file data
     val byteStream = new ByteStream
     byteStream << this
     byteStream.writeToFile(fileName)
   }
 
-  /** Loads the class using the current class loader. */
-  def dynamicallyLoad : Unit = {
-    throw new Error("Not supported yet.")
-    /*
-    val byteStream = (new ByteStream) << this
-    val bytes : Array[Byte] = byteStream.getBytes
-    CustomClassLoader.registerClass(className, bytes)
-    */
+  def registerWithClassLoader(classLoader : CafebabeClassLoader) {
+    classLoader.register(this)
   }
 
   def toStream(byteStream: ByteStream): ByteStream = {
@@ -126,7 +142,7 @@ class ClassFile(val className: String, parentName: Option[String] = None) extend
       accessFlags <<
       thisClass <<
       superClass <<
-      interfacesCount <<
+      interfaces.size.asInstanceOf[U2] << interfaces.reverse <<
       fields.size.asInstanceOf[U2] << fields <<
       methods.size.asInstanceOf[U2] << methods <<
       attributes.size.asInstanceOf[U2] << attributes

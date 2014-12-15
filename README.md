@@ -7,4 +7,4 @@ http://lara.epfl.ch/w/Teaching for more info.
 
 The wiki on GitHub contains some documentation.
 
-[![Build Status](https://travis-ci.org/fludo/cafebabe.png)](https://travis-ci.org/fludo/cafebabe)
+[![Build Status](https://travis-ci.org/trugath/cafebabe.png)](https://travis-ci.org/trugath/cafebabe)

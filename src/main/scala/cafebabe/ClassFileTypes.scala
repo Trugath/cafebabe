@@ -1,6 +1,9 @@
 package cafebabe
 
 object ClassFileTypes {
+
+  import scala.language.implicitConversions
+  
   type U1 = Byte
   type U2 = Short
   type U4 = Int

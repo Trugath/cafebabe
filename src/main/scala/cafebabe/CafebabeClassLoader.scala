@@ -6,7 +6,7 @@ import scala.collection.mutable.{Map=>MutableMap}
  *  `ClassFile`s directly from memory. */
 class CafebabeClassLoader(parent : ClassLoader) extends ClassLoader(parent) {
   def this() {
-    this(ClassLoader.getSystemClassLoader())
+    this(ClassLoader.getSystemClassLoader)
   }
 
   private val classBytes : MutableMap[String,Array[Byte]] = MutableMap.empty
@@ -17,7 +17,7 @@ class CafebabeClassLoader(parent : ClassLoader) extends ClassLoader(parent) {
       throw new IllegalArgumentException("Cannot define the same class twice (%s).".format(name))
     }
 
-    val byteStream = (new ByteStream) << classFile
+    val byteStream = new ByteStream << classFile
     classBytes(name) = byteStream.getBytes
   }
 

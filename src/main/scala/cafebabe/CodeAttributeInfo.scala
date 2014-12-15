@@ -22,12 +22,12 @@ class CodeAttributeInfo(val codeNameIndex: U2) extends AttributeInfo(codeNameInd
   var attributes: Seq[AttributeInfo] = Nil
 
   override def toStream(stream: ByteStream): ByteStream = {
-    val codeLength: U4 = code.size.asInstanceOf[U4]
+    val codeLength: U4 = code.size
     val exceptionTableLength: U2 = exceptionTable.size.asInstanceOf[U2]
     val attributesCount: U2 = attributes.size.asInstanceOf[U2]
 
     val totalLength = size
-    stream << codeNameIndex << (totalLength-6).asInstanceOf[U4] << maxStack << maxLocals << codeLength << code
+    stream << codeNameIndex << (totalLength-6) << maxStack << maxLocals << codeLength << code
     stream << exceptionTableLength << exceptionTable
     stream << attributesCount << attributes
   }

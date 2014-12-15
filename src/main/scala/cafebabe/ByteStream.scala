@@ -9,9 +9,9 @@ class ByteStream {
   import java.io.{DataOutputStream,ByteArrayOutputStream}
   import ClassFileTypes._
 
-  private var bytes = new ByteArrayOutputStream
+  private val bytes = new ByteArrayOutputStream
   def getBytes : Array[Byte] = { stream.flush() ; bytes.toByteArray }
-  private var stream: DataOutputStream = new DataOutputStream(bytes)
+  private val stream: DataOutputStream = new DataOutputStream(bytes)
 
   // appends bytes to the stream
   def <<(u1: U1): ByteStream = { stream.write(u1); this }
@@ -26,7 +26,7 @@ class ByteStream {
   }
   // appends an entire other byte stream to the stream
   def <<(bs: ByteStream): ByteStream = {
-    bs.stream.flush
+    bs.stream.flush()
     bs.bytes.writeTo(this.stream)
     this
   }
@@ -37,7 +37,7 @@ class ByteStream {
     import java.io.FileOutputStream
 
     val fileStream = new FileOutputStream(fileName)
-    stream.flush
+    stream.flush()
     bytes.writeTo(fileStream)
     fileStream.close()
   }

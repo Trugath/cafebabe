@@ -16,7 +16,7 @@ class LineNumberTableAttributeInfo(val nameIndex : U2) extends AttributeInfo(nam
     // println("Num entries : " + ne)
     // println("Computed    : " + (2 + ne * 4))
 
-    stream << nameIndex << ((2 + ne * 4) : U4) << (ne : U2)
+    stream << nameIndex << (2 + ne * 4 : U4) << (ne : U2)
     for((pc,ln) <- _entries.toSeq.sortBy(_._1)) {
       stream << (pc : U2) << (ln : U2)
     }

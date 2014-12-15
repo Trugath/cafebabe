@@ -14,3 +14,5 @@ scalacOptions += "-Xexperimental"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
 
+fork in Test := true
+

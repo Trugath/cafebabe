@@ -3,19 +3,19 @@ package cafebabe
 class ConstantPool extends Streamable {
   import ClassFileTypes._
 
-  import scala.collection.mutable.HashMap
+  import scala.collection.mutable
 
   /** The following maps keep track of the constants already added to the pool to avoid duplicates. */
-  private val intMap: HashMap[Int,U2]       = new HashMap[Int,U2]
-  private val floatMap: HashMap[Float,U2]   = new HashMap[Float,U2]
-  private val longMap: HashMap[Long,U2]     = new HashMap[Long,U2]
-  private val doubleMap: HashMap[Double,U2] = new HashMap[Double,U2]
-  private val stringMap: HashMap[String,U2] = new HashMap[String,U2]       // all internal strings
-  private val stringConstMap: HashMap[U2,U2] = new HashMap[U2,U2]          // string constants
-  private val classMap: HashMap[U2,U2] = new HashMap[U2,U2]
-  private val fieldRefMap: HashMap[(U2,U2),U2] = new HashMap[(U2,U2),U2]
-  private val methodRefMap: HashMap[(U2,U2),U2] = new HashMap[(U2,U2),U2]
-  private val nameAndTypeMap: HashMap[(U2,U2),U2] = new HashMap[(U2,U2),U2]
+  private val intMap: mutable.HashMap[Int,U2]       = new mutable.HashMap[Int,U2]
+  private val floatMap: mutable.HashMap[Float,U2]   = new mutable.HashMap[Float,U2]
+  private val longMap: mutable.HashMap[Long,U2]     = new mutable.HashMap[Long,U2]
+  private val doubleMap: mutable.HashMap[Double,U2] = new mutable.HashMap[Double,U2]
+  private val stringMap: mutable.HashMap[String,U2] = new mutable.HashMap[String,U2]       // all internal strings
+  private val stringConstMap: mutable.HashMap[U2,U2] = new mutable.HashMap[U2,U2]          // string constants
+  private val classMap: mutable.HashMap[U2,U2] = new mutable.HashMap[U2,U2]
+  private val fieldRefMap: mutable.HashMap[(U2,U2),U2] = new mutable.HashMap[(U2,U2),U2]
+  private val methodRefMap: mutable.HashMap[(U2,U2),U2] = new mutable.HashMap[(U2,U2),U2]
+  private val nameAndTypeMap: mutable.HashMap[(U2,U2),U2] = new mutable.HashMap[(U2,U2),U2]
 
   /** The list of all entries in that constant pool. */
   private var entries: List[CPEntry] = Nil
@@ -160,6 +160,6 @@ class ConstantPool extends Streamable {
   }
 
   def toStream(stream: ByteStream): ByteStream = {
-    stream << nextIndex.asInstanceOf[U2] << entries
+    stream << nextIndex << entries
   }
 }

@@ -36,7 +36,6 @@ package cafebabe.test {
     }
 
     test("DL 2") {
-      // NB this test is incomplete.
       val cf = mkMinimalClassFile
 
       val cl = new CafebabeClassLoader

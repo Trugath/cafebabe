@@ -13,7 +13,7 @@ object AttributeInfo {
 class AttributeInfo(val attributeNameIndex: U2, val info: Seq[U1]) extends Streamable {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << attributeNameIndex
-    stream << info.size.asInstanceOf[U4]
+    stream << info.size
     info.foreach(stream << _)
     stream
   }

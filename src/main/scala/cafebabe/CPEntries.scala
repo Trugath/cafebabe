@@ -20,67 +20,67 @@ object CPTags {
 
 sealed abstract class CPEntry(val tag: U1) extends Streamable
 
-case class CPClassInfo(val nameIndex: U2) extends CPEntry(CPTags.Class) {
+case class CPClassInfo(nameIndex: U2) extends CPEntry(CPTags.Class) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << nameIndex
   }
 }
 
-case class CPFieldRefInfo(val classIndex: U2, nameAndTypeIndex: U2) extends CPEntry(CPTags.Fieldref) {
+case class CPFieldRefInfo(classIndex: U2, nameAndTypeIndex: U2) extends CPEntry(CPTags.Fieldref) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << classIndex << nameAndTypeIndex
   }
 }
 
-case class CPMethodRefInfo(val classIndex: U2, nameAndTypeIndex: U2) extends CPEntry(CPTags.Methodref) {
+case class CPMethodRefInfo(classIndex: U2, nameAndTypeIndex: U2) extends CPEntry(CPTags.Methodref) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << classIndex << nameAndTypeIndex
   }
 }
 
-case class CPInterfaceMethodRefInfo(val classIndex: U2, nameAndTypeIndex: U2) extends CPEntry(CPTags.InterfaceMethodref) {
+case class CPInterfaceMethodRefInfo(classIndex: U2, nameAndTypeIndex: U2) extends CPEntry(CPTags.InterfaceMethodref) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << classIndex << nameAndTypeIndex
   }
 }
 
-case class CPStringInfo(val stringIndex: U2) extends CPEntry(CPTags.String) {
+case class CPStringInfo(stringIndex: U2) extends CPEntry(CPTags.String) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << stringIndex
   }
 }
 
-case class CPIntegerInfo(val bytes: U4) extends CPEntry(CPTags.Integer) {
+case class CPIntegerInfo(bytes: U4) extends CPEntry(CPTags.Integer) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << bytes
   }
 }
 
-case class CPFloatInfo(val bytes: U4) extends CPEntry(CPTags.Float) {
+case class CPFloatInfo(bytes: U4) extends CPEntry(CPTags.Float) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << bytes
   }
 }
 
-case class CPLongInfo(val highBytes: U4, val lowBytes: U4) extends CPEntry(CPTags.Long) {
+case class CPLongInfo(highBytes: U4, lowBytes: U4) extends CPEntry(CPTags.Long) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << highBytes << lowBytes
   }
 }
 
-case class CPDoubleInfo(val highBytes: U4, val lowBytes: U4) extends CPEntry(CPTags.Double) {
+case class CPDoubleInfo(highBytes: U4, lowBytes: U4) extends CPEntry(CPTags.Double) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << highBytes << lowBytes
   }
 }
 
-case class CPNameAndTypeInfo(val nameIndex: U2, val descriptorIndex: U2) extends CPEntry(CPTags.NameAndType) {
+case class CPNameAndTypeInfo(nameIndex: U2, descriptorIndex: U2) extends CPEntry(CPTags.NameAndType) {
   override def toStream(stream: ByteStream): ByteStream = {
     stream << tag << nameIndex << descriptorIndex
   }
 }
 
-case class CPUtf8Info(val bytes: Seq[U1]) extends CPEntry(CPTags.Utf8) {
+case class CPUtf8Info(bytes: Seq[U1]) extends CPEntry(CPTags.Utf8) {
   private var original: String = _
 
   def setSource(str: String): CPUtf8Info = { original = str; this }

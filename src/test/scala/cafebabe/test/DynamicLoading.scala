@@ -14,7 +14,7 @@ package cafebabe.test {
   class DynamicLoading extends FunSuite {
 
     private def mkMinimalClassFile: ClassFile = {
-      val cf = new ClassFile("cafebabe$test$MyTest", Some("cafebabe/test/MyTestBase"))
+      val cf = new ClassFile("MyTest", Some("cafebabe/test/MyTestBase"))
       cf.addDefaultConstructor()
       val ch = cf.addMethod("I", "plusOne", "I").codeHandler
       ch << ILoad(1) << Ldc(1) << IADD << IRETURN
@@ -28,7 +28,7 @@ package cafebabe.test {
       val cl = new CafebabeClassLoader
       cl.register(cf)
 
-      val c = cl.loadClass("cafebabe$test$MyTest")
+      val c = cl.loadClass("MyTest")
       val o = c.newInstance().asInstanceOf[AnyRef]
       val m = c.getMethod("plusOne", Integer.TYPE)
 
@@ -40,7 +40,7 @@ package cafebabe.test {
 
       val cl = new CafebabeClassLoader
       cl.register(cf)
-      val dynObj = cl.newInstance("cafebabe$test$MyTest").asInstanceOf[MyTestBase]
+      val dynObj = cl.newInstance("MyTest").asInstanceOf[MyTestBase]
       assert(dynObj.plusOne(41) === 42)
     }
   }

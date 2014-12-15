@@ -8,7 +8,7 @@ import org.scalatest.FunSuite
 class DynamicLoading extends FunSuite {
   private def mkMinimalClassFile : ClassFile = {
     val cf = new ClassFile("MyTest", None)
-    cf.addDefaultConstructor
+    cf.addDefaultConstructor()
     val ch = cf.addMethod("I", "plusOne", "I").codeHandler
     ch << ILoad(1) << Ldc(1) << IADD << IRETURN
     ch.freeze

@@ -9,8 +9,8 @@ import org.scalatest.FunSuite
 class CodeHandlerTests extends FunSuite {
   private def mkCodeHandler() : CodeHandler = {
     val cf = new cafebabe.ClassFile("Test", None)
-    cf.addDefaultConstructor
-    cf.addMainMethod.codeHandler
+    cf.addDefaultConstructor()
+    cf.addMainMethod().codeHandler
   }
 
   test("Cannot freeze twice") {

@@ -11,9 +11,9 @@ class GitHubIssue6 extends FunSuite {
   test("Correct stack height") {
     val cf = new cafebabe.ClassFile("Test", None)
 
-    cf.addDefaultConstructor
+    cf.addDefaultConstructor()
 
-    val ch = cf.addMainMethod.codeHandler
+    val ch = cf.addMainMethod().codeHandler
 
     ch <<
       GetStatic("java/lang/System", "out", "Ljava/io/PrintStream;") <<
@@ -27,9 +27,9 @@ class GitHubIssue6 extends FunSuite {
   test("Incorrect stack height") {
     val cf = new cafebabe.ClassFile("Test", None)
 
-    cf.addDefaultConstructor
+    cf.addDefaultConstructor()
 
-    val ch = cf.addMainMethod.codeHandler
+    val ch = cf.addMainMethod().codeHandler
 
     ch <<
       GetStatic("java/lang/System", "out", "Ljava/io/PrintStream;") <<

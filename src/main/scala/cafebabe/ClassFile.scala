@@ -84,7 +84,7 @@ class ClassFile(val className: String, parentName: Option[String] = None) extend
   }
 
   /** Adds the main method */
-  def addMainMethod: MethodHandler = {
+  def addMainMethod(): MethodHandler = {
     val handler = addMethod("V", "main", "[Ljava/lang/String;")
     handler.setFlags(Flags.METHOD_ACC_PUBLIC | Flags.METHOD_ACC_STATIC)
     handler
@@ -109,7 +109,7 @@ class ClassFile(val className: String, parentName: Option[String] = None) extend
   }
 
   /** Adds a default constructor. */
-  def addDefaultConstructor: MethodHandler = {
+  def addDefaultConstructor(): MethodHandler = {
     import ByteCodes._
     import AbstractByteCodes._
 

@@ -1,16 +1,20 @@
 package cafebabe.test
 
-abstract class MyTestBase {
-  def plusOne( i: Int ): Int
-}
-
 import cafebabe._
 import cafebabe.ByteCodes._
 import cafebabe.AbstractByteCodes._
 
 import org.scalatest.FunSuite
 
+object DynamicLoading {
+  abstract class MyTestBase {
+    def plusOne( i: Int ): Int
+  }
+}
+
 class DynamicLoading extends FunSuite {
+
+  import cafebabe.test.DynamicLoading.MyTestBase
 
   private def mkMinimalClassFile(name: String, parent: Option[String] = None): ClassFile = {
     val cf = new ClassFile(name, parent)
@@ -37,7 +41,7 @@ class DynamicLoading extends FunSuite {
 
   test("parent abstract instance to expose the method") {
     val cl = new CafebabeClassLoader
-    cl.register(mkMinimalClassFile("MyTest", Some("cafebabe/test/MyTestBase")))
+    cl.register(mkMinimalClassFile("MyTest", Some("cafebabe/test/DynamicLoading$MyTestBase")))
 
     val dynObj = cl.newInstance("MyTest").as[MyTestBase]
     assert(dynObj.plusOne(41) === 42)

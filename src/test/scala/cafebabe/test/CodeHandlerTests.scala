@@ -16,10 +16,10 @@ class CodeHandlerTests extends FunSuite {
   test("Cannot freeze twice") {
     val ch = mkCodeHandler()
     ch << RETURN
-    ch.freeze
+    ch.freeze()
 
     intercept[CodeFreezingException] {
-      ch.freeze
+      ch.freeze()
     }
   }
 }

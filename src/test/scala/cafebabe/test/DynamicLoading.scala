@@ -17,7 +17,7 @@ class DynamicLoading extends FunSuite {
     cf.addDefaultConstructor()
     val ch = cf.addMethod("I", "plusOne", "I").codeHandler
     ch << ILoad(1) << Ldc(1) << IADD << IRETURN
-    ch.freeze
+    ch.freeze()
     cf
   }
 

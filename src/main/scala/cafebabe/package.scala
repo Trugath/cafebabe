@@ -53,16 +53,14 @@ package object cafebabe {
       case 'B' | 'C' | 'F' | 'I' | 'S' | 'Z' => (1, s.head.toString, s.tail)
       case 'D' | 'J' => (2, s.head.toString, s.tail)
       case 'V' => (0, s.head.toString, s.tail)  // can't really be an argument type.. Oh well.
-      case 'L' => {
+      case 'L' =>
         val end = s.indexOf(';')
         if(end < 0) sys.error("Malformed type (sub)string: " + s)
         (1, s.substring(0, end), s.substring(end + 1, s.size))
-      }
-      case '[' => {
+      case '[' =>
         if(s.tail.isEmpty) sys.error("Malformed type string: incomplete array type.")
         val (_, ss, rest) = parseRec(s.tail)
         (1, "[" + ss, rest)
-      }
       case _ => sys.error("Malformed type (sub)string: " + s)
     }
   }

@@ -117,7 +117,7 @@ class ClassFile(val className: String, parentName: Option[String] = None) extend
     mh.codeHandler << ALOAD_0
     mh.codeHandler << InvokeSpecial(superClassName, constructorName, "()V")
     mh.codeHandler << RETURN
-    mh.codeHandler.freeze
+    mh.codeHandler.freeze()
     mh
   }
 

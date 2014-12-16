@@ -84,7 +84,7 @@ object AbstractByteCodes {
 
   /** Generates code to load constants, using the appropriate method depending on the values. */
   object Ldc {
-    def apply(i: Int): AbstractByteCodeGenerator = ((ch: CodeHandler) => {
+    def apply(i: Int): AbstractByteCodeGenerator = (ch: CodeHandler) => {
       i match {
         case -1 => ch << ICONST_M1
         case 0 => ch << ICONST_0
@@ -93,69 +93,69 @@ object AbstractByteCodes {
         case 3 => ch << ICONST_3
         case 4 => ch << ICONST_4
         case 5 => ch << ICONST_5
-        case _ if(i >= -128 && i <= 127) => ch << BIPUSH << RawByte(i.asInstanceOf[U1])
-        case _ if(i >= -32768 && i <= 32767) => ch << SIPUSH << RawBytes(i.asInstanceOf[U2])
+        case _ if i >= -128 && i <= 127 => ch << BIPUSH << RawByte(i.asInstanceOf[U1])
+        case _ if i >= -32768 && i <= 32767 => ch << SIPUSH << RawBytes(i.asInstanceOf[U2])
         case _ => ch << ldc_ref(ch.constantPool.addInt(i))
       }
-    })
+    }
 
-    def apply(f: Float): AbstractByteCodeGenerator = ((ch: CodeHandler) => {
+    def apply(f: Float): AbstractByteCodeGenerator = (ch: CodeHandler) => {
       f match {
         case 0.0f => ch << FCONST_0
         case 1.0f => ch << FCONST_1
         case 2.0f => ch << FCONST_2
         case _ => ch << ldc_ref(ch.constantPool.addFloat(f))
       }
-    })
+    }
 
-    def apply(d: Double): AbstractByteCodeGenerator = ((ch: CodeHandler) => {
+    def apply(d: Double): AbstractByteCodeGenerator = (ch: CodeHandler) => {
       d match {
         case 0.0 => ch << DCONST_0
         case 1.0 => ch << DCONST_1
         case _ => ch << ldc2_ref(ch.constantPool.addDouble(d))
       }
-    })
+    }
 
-    def apply(l: Long): AbstractByteCodeGenerator = ((ch: CodeHandler) => {
+    def apply(l: Long): AbstractByteCodeGenerator = (ch: CodeHandler) => {
       l match {
         case 0l => ch << LCONST_0
         case 1l => ch << LCONST_1
         case _ => ch << ldc2_ref(ch.constantPool.addLong(l))
       }
-    })
+    }
 
-    def apply(s: String): AbstractByteCodeGenerator = ((ch: CodeHandler) => {
+    def apply(s: String): AbstractByteCodeGenerator = (ch: CodeHandler) => {
       ch << ldc_ref(ch.constantPool.addStringConstant(ch.constantPool.addString(s)))
-    })
+    }
 
-    def apply(c: Class[_]): AbstractByteCodeGenerator = ((ch: CodeHandler) => {
-      ch << ldc_ref(ch.constantPool.addClass(ch.constantPool.addString(c.getName().replaceAll("\\.", "/"))))
-    })
+    def apply(c: Class[_]): AbstractByteCodeGenerator = (ch: CodeHandler) => {
+      ch << ldc_ref(ch.constantPool.addClass(ch.constantPool.addString(c.getName.replaceAll("\\.", "/"))))
+    }
 
-    private def ldc_ref(cpRef: U2): AbstractByteCodeGenerator = ((ch: CodeHandler) => {
-      if(cpRef <= 0xFF) {
+    private def ldc_ref(cpRef: U2): AbstractByteCodeGenerator = (ch: CodeHandler) => {
+      if (cpRef <= 0xFF) {
         ch << LDC << RawByte((cpRef & 0xFF).asInstanceOf[U1])
       } else {
         ch << LDC_W << RawBytes(cpRef)
       }
-    })
+    }
 
-    private def ldc2_ref(cpRef: U2): AbstractByteCodeGenerator = ((ch: CodeHandler) => {
+    private def ldc2_ref(cpRef: U2): AbstractByteCodeGenerator = (ch: CodeHandler) => {
       ch << LDC2_W << RawBytes(cpRef)
-    })
+    }
   }
 
   // IINC business
   object IInc {
-    def apply(index: Int, inc: Int): AbstractByteCodeGenerator = ((ch: CodeHandler) => {
-      if(index <= 127 && inc >= -128 && inc <= 127) {
+    def apply(index: Int, inc: Int): AbstractByteCodeGenerator = (ch: CodeHandler) => {
+      if (index <= 127 && inc >= -128 && inc <= 127) {
         ch << IINC << RawByte(index.asInstanceOf[U1]) << RawByte(inc.asInstanceOf[U1])
-      } else if(index <= 32767 && inc >= -32768 && inc <= 32767) {
+      } else if (index <= 32767 && inc >= -32768 && inc <= 32767) {
         ch << WIDE << IINC << RawBytes(index.asInstanceOf[U2]) << RawBytes(index.asInstanceOf[U2])
       } else {
         sys.error("Index or increment too large in IInc " + index + " " + inc)
       }
-    })
+    }
   }
 
   // Loading and storing locals
@@ -167,8 +167,8 @@ object AbstractByteCodes {
       case 1 => ch << bc1
       case 2 => ch << bc2
       case 3 => ch << bc3
-      case _ if(index >= 0 && index <= 127) => ch << bc << RawByte(index.asInstanceOf[U1])
-      case _ if(index >= 0 && index <= 32767) => ch << WIDE << bc << RawBytes(index.asInstanceOf[U2])
+      case _ if index >= 0 && index <= 127 => ch << bc << RawByte(index.asInstanceOf[U1])
+      case _ if index >= 0 && index <= 32767 => ch << WIDE << bc << RawBytes(index.asInstanceOf[U2])
       case _ => sys.error("Invalid index in " + name + " " + index)
     }
   }

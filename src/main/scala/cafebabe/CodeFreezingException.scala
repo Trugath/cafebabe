@@ -24,7 +24,7 @@ case class CodeFreezingException(message : String, abstractByteCodes : Seq[Abstr
           pc += abc.size
       }
 
-      b.toString
+      b.toString()
     }
   }
 }

@@ -137,25 +137,22 @@ class ConstantPool extends Streamable {
   }
 
   def getFieldSize(idx: U2): Int = entryAt(idx) match {
-    case CPFieldRefInfo(_, natid) => {
+    case CPFieldRefInfo(_, natid) =>
       val strDesc: String = entryAt(entryAt(natid).asInstanceOf[CPNameAndTypeInfo].descriptorIndex).asInstanceOf[CPUtf8Info].getSource
       strDesc match {
         case "D" | "J" => 2
         case _ => 1
       }
-    }
     case _ => sys.error("getFieldSize: no field info at given index.")
   }
 
   def getMethodEffect(idx: U2): Int = entryAt(idx) match {
-    case CPMethodRefInfo(_, natid) => {
+    case CPMethodRefInfo(_, natid) =>
       val strDesc: String = entryAt(entryAt(natid).asInstanceOf[CPNameAndTypeInfo].descriptorIndex).asInstanceOf[CPUtf8Info].getSource
       methodSignatureToStackEffect(strDesc)
-    }
-    case CPInterfaceMethodRefInfo(_, natid) => {
+    case CPInterfaceMethodRefInfo(_, natid) =>
       val strDesc: String = entryAt(entryAt(natid).asInstanceOf[CPNameAndTypeInfo].descriptorIndex).asInstanceOf[CPUtf8Info].getSource
       methodSignatureToStackEffect(strDesc)
-    }
     case _ => sys.error("getMethodEffect: no method ref info at given index.")
   }
 

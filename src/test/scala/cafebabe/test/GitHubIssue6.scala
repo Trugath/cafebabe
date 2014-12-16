@@ -21,7 +21,7 @@ class GitHubIssue6 extends FunSuite {
       InvokeVirtual("java/io/PrintStream", "println", "(Ljava/lang/String;)V") <<
       RETURN
 
-    ch.freeze
+    ch.freeze()
   }
 
   test("Incorrect stack height") {
@@ -39,7 +39,7 @@ class GitHubIssue6 extends FunSuite {
     // Mind the missing RETURN.
 
     intercept[CodeFreezingException] {
-      ch.freeze
+      ch.freeze()
     }
   }
 }

@@ -30,11 +30,7 @@ class CafebabeClassLoader(parent : ClassLoader) extends ClassLoader(parent) {
     }
   }
 
-  def newInstance(name : String) : AnyRef = {
-    this.loadClass(name).newInstance().asInstanceOf[AnyRef]
-  }
-
-  def newDynamicInstance(name : String) : DynObj = {
+  def newInstance(name : String) : DynObj = {
     new DynObj(this.loadClass(name).newInstance())
   }
 }

@@ -43,7 +43,7 @@ class DynamicLoading extends FunSuite {
     val cl = new CafebabeClassLoader
     cl.register(cf)
 
-    val dynObj = cl.newInstance("MyTest").asInstanceOf[MyTestBase]
+    val dynObj = cl.newInstance("MyTest").as[MyTestBase]
 
     assert(dynObj.plusOne(41) === 42)
   }
@@ -55,7 +55,7 @@ class DynamicLoading extends FunSuite {
     val cl = new CafebabeClassLoader
     cl.register(cf)
 
-    val dynObj = cl.newDynamicInstance("MyTest")
+    val dynObj = cl.newInstance("MyTest")
 
     assert(dynObj.plusOne(41) === 42)
   }
@@ -67,7 +67,7 @@ class DynamicLoading extends FunSuite {
     val cl = new CafebabeClassLoader
     cl.register(cf)
 
-    val dynObj = cl.newDynamicInstance("MyTest")
+    val dynObj = cl.newInstance("MyTest")
 
     assert((dynObj plusOne 41) === 42)
   }
@@ -81,7 +81,7 @@ class DynamicLoading extends FunSuite {
     val cl = new CafebabeClassLoader
     cl.register(cf)
 
-    val dynObj = cl.newDynamicInstance("MyTest")
+    val dynObj = cl.newInstance("MyTest")
 
     assert(dynObj.fortytwo() === 42)
   }
@@ -95,7 +95,7 @@ class DynamicLoading extends FunSuite {
     val cl = new CafebabeClassLoader
     cl.register(cf)
 
-    val dynObj = cl.newDynamicInstance("MyTest")
+    val dynObj = cl.newInstance("MyTest")
 
     assert(dynObj.fortytwo === 42)
   }
@@ -109,7 +109,7 @@ class DynamicLoading extends FunSuite {
     val cl = new CafebabeClassLoader
     cl.register(cf)
 
-    val dynObj = cl.newDynamicInstance("MyTest")
+    val dynObj = cl.newInstance("MyTest")
 
     assert((dynObj fortytwo) === 42)
   }
@@ -120,7 +120,7 @@ class DynamicLoading extends FunSuite {
     val cl = new CafebabeClassLoader
     cl.register(cf)
 
-    val dynObj = cl.newDynamicInstance("MyTest")
+    val dynObj = cl.newInstance("MyTest")
 
     intercept[NoSuchMethodException] {
       dynObj.invalidMethod

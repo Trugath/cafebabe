@@ -40,4 +40,5 @@ class DynObj private[cafebabe](base : Any) extends Dynamic {
 
   def selectDynamic(name: String) : Any = getMethod(name).apply()
   def applyDynamic(name: String)(args: Any*) : Any = getMethod(name).apply(args: _*)
+  def as[A]: A = base.asInstanceOf[A]
 }

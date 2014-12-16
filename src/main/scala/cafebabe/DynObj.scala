@@ -1,6 +1,7 @@
 package cafebabe
 
-import scala.collection.mutable
+import scala.collection.mutable.{Map=>MutableMap}
+
 import scala.language.dynamics
 
 /** Do not rely on this object, as it will change/be renamed, etc.
@@ -12,7 +13,7 @@ class DynObj private[cafebabe](base : Any) extends Dynamic {
   import reflect.runtime.{universe => ru}
   import ru._
 
-  private val methodCache: mutable.HashMap[String, MethodMirror] = mutable.HashMap.empty
+  private val methodCache: MutableMap[String, MethodMirror] = MutableMap.empty
 
   private val im =
     ru.runtimeMirror(base.getClass.getClassLoader)

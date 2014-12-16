@@ -44,4 +44,16 @@ class DynamicLoading extends FunSuite {
 
     assert(dynObj.plusOne(41) === 42)
   }
+
+  test("DL 3") {
+
+    val cf = mkMinimalClassFile("MyTest")
+
+    val cl = new CafebabeClassLoader
+    cl.register(cf)
+
+    val dynObj = cl.newDynamicInstance("MyTest")
+
+    assert(dynObj.plusOne(41) === 42)
+  }
 }

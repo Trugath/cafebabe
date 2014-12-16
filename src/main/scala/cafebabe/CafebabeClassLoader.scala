@@ -21,8 +21,10 @@ class CafebabeClassLoader(parent : ClassLoader) extends ClassLoader(parent) {
     classBytes(name) = byteStream.getBytes
   }
 
-  override def findClass(name : String) : Class[_] = {
-    classBytes.get(name) match {
+  // Takes the classes binary name
+  override def findClass(name: String) : Class[_] = {
+    val fqdn = name.replace('/', '.')
+    classBytes.get(fqdn) match {
       case Some(ba) =>
         defineClass(name, ba, 0, ba.length)
 

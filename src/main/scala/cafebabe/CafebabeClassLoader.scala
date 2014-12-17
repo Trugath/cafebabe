@@ -11,20 +11,22 @@ class CafebabeClassLoader(parent : ClassLoader) extends ClassLoader(parent) {
 
   private val classBytes : MutableMap[String,Array[Byte]] = MutableMap.empty
 
+  private def canonicalName(name: String): String = name.replace('/', '.').replace('$', '.')
+
   def register(classFile : ClassFile) {
     val name = classFile.className
-    if(classBytes.isDefinedAt(name)) {
+    val canonical = canonicalName(name)
+    if(classBytes.isDefinedAt(canonical)) {
       throw new IllegalArgumentException("Cannot define the same class twice (%s).".format(name))
     }
 
     val byteStream = new ByteStream << classFile
-    classBytes(name) = byteStream.getBytes
+    classBytes(canonical) = byteStream.getBytes
   }
 
-  // Takes the classes binary name
+  // Takes the classes binary name eg. com/foo/bar
   override def findClass(name: String) : Class[_] = {
-    val fqdn = name.replace('/', '.')
-    classBytes.get(fqdn) match {
+    classBytes.get(canonicalName(name)) match {
       case Some(ba) =>
         defineClass(name, ba, 0, ba.length)
 

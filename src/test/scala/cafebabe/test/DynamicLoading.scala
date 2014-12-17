@@ -30,9 +30,9 @@ class DynamicLoading extends FunSuite {
 
   test("basic invoke using java reflection") {
     val cl = new CafebabeClassLoader
-    cl.register(mkMinimalClassFile("MyTest"))
+    cl.register(mkMinimalClassFile("cafebabe/MyTest"))
 
-    val c = cl.loadClass("MyTest")
+    val c = cl.loadClass("cafebabe.MyTest")
     val o = c.newInstance().asInstanceOf[AnyRef]
     val m = c.getMethod("plusOne", Integer.TYPE)
 
@@ -41,41 +41,41 @@ class DynamicLoading extends FunSuite {
 
   test("parent abstract instance to expose the method") {
     val cl = new CafebabeClassLoader
-    cl.register(mkMinimalClassFile("MyTest", Some("cafebabe/test/DynamicLoading$MyTestBase")))
+    cl.register(mkMinimalClassFile("cafebabe/MyTest", Some("cafebabe/test/DynamicLoading$MyTestBase")))
 
-    val dynObj = cl.newInstance("MyTest").as[MyTestBase]
+    val dynObj = cl.newInstance("cafebabe.MyTest").as[MyTestBase]
     assert(dynObj.plusOne(41) === 42)
   }
 
   test("scala Dynamic and applyDynamic to hide reflection") {
     val cl = new CafebabeClassLoader
-    cl.register(mkMinimalClassFile("MyTest"))
+    cl.register(mkMinimalClassFile("cafebabe/MyTest"))
 
-    val dynObj = cl.newInstance("MyTest")
+    val dynObj = cl.newInstance("cafebabe.MyTest")
     assert(dynObj.plusOne(41) === 42)
   }
 
   test("infix notation with Dynamic") {
     val cl = new CafebabeClassLoader
-    cl.register(mkMinimalClassFile("MyTest"))
+    cl.register(mkMinimalClassFile("cafebabe/MyTest"))
 
-    val dynObj = cl.newInstance("MyTest")
+    val dynObj = cl.newInstance("cafebabe.MyTest")
     assert((dynObj plusOne 41) === 42)
   }
 
   test("dynamic method with empty params") {
     val cl = new CafebabeClassLoader
-    cl.register(mkMinimalClassFile("MyTest"))
+    cl.register(mkMinimalClassFile("cafebabe/MyTest"))
 
-    val dynObj = cl.newInstance("MyTest")
+    val dynObj = cl.newInstance("cafebabe.MyTest")
     assert(dynObj.fortytwo() === 42)
   }
 
   test("dynamic method with no params") {
     val cl = new CafebabeClassLoader
-    cl.register(mkMinimalClassFile("MyTest"))
+    cl.register(mkMinimalClassFile("cafebabe/MyTest"))
 
-    val dynObj = cl.newInstance("MyTest")
+    val dynObj = cl.newInstance("cafebabe.MyTest")
     assert(dynObj.fortytwo === 42)
   }
 
@@ -83,17 +83,17 @@ class DynamicLoading extends FunSuite {
     import scala.language.postfixOps
 
     val cl = new CafebabeClassLoader
-    cl.register(mkMinimalClassFile("MyTest"))
+    cl.register(mkMinimalClassFile("cafebabe/MyTest"))
 
-    val dynObj = cl.newInstance("MyTest")
+    val dynObj = cl.newInstance("cafebabe.MyTest")
     assert((dynObj fortytwo) === 42)
   }
 
   test("Invoke a non-existent method") {
     val cl = new CafebabeClassLoader
-    cl.register(mkMinimalClassFile("MyTest"))
+    cl.register(mkMinimalClassFile("cafebabe/MyTest"))
 
-    val dynObj = cl.newInstance("MyTest")
+    val dynObj = cl.newInstance("cafebabe.MyTest")
     intercept[NoSuchMethodException] {
       dynObj.invalidMethod
     }

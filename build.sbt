@@ -2,7 +2,7 @@ name := "Cafebabe"
 
 version := "1.2"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.5"
 
 scalacOptions += "-deprecation"
 

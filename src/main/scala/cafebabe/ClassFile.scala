@@ -83,6 +83,24 @@ class ClassFile(val className: String, parentName: Option[String] = None) extend
     new MethodHandler(inf, code, constantPool, concatArgs)
   }
 
+  def addAbstractMethod(retTpe: String, name: String, args: String*): MethodHandler = addAbstractMethod(retTpe,name,args.toList)
+  def addAbstractMethod(retTpe: String, name: String, args: List[String]): MethodHandler = {
+      val concatArgs = args.mkString("")
+
+      val accessFlags: U2 = defaultMethodAccessFlags
+      val nameIndex: U2 = constantPool.addString(name)
+      val descriptorIndex: U2 = constantPool.addString(
+        "(" + concatArgs + ")" + retTpe
+      )
+      val inf = MethodInfo(accessFlags, nameIndex, descriptorIndex, List())
+      methods = methods ::: (inf :: Nil)
+
+      val code = CodeAttributeInfo(codeNameIndex)
+      val mh = new MethodHandler(inf, code, constantPool, concatArgs)
+      mh.setFlags(Flags.METHOD_ACC_ABSTRACT)
+      mh
+    }
+
   /** Adds the main method */
   def addMainMethod(): MethodHandler = {
     val handler = addMethod("V", "main", "[Ljava/lang/String;")

@@ -89,6 +89,15 @@ class DynamicLoading extends FunSuite {
     assert((dynObj fortytwo) === 42)
   }
 
+  test("call method twice to test caching") {
+    val cl = new CafebabeClassLoader
+    cl.register(mkMinimalClassFile("cafebabe/MyTest"))
+
+    val dynObj = cl.newInstance("cafebabe.MyTest")
+    assert(dynObj.fortytwo() === 42)
+    assert(dynObj.fortytwo() === 42)
+  }
+
   test("Invoke a non-existent method") {
     val cl = new CafebabeClassLoader
     cl.register(mkMinimalClassFile("cafebabe/MyTest"))

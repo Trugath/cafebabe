@@ -7,4 +7,4 @@ http://lara.epfl.ch/w/Teaching for more info.
 
 The wiki on GitHub contains some documentation.
 
-[![Build Status](https://travis-ci.org/Trugath/cafebabe.png)](https://travis-ci.org/Trugath/cafebabe)
+[![Build Status](https://travis-ci.org/Trugath/cafebabe.png)](https://travis-ci.org/Trugath/cafebabe)[![Coverage Status](https://coveralls.io/repos/github/Trugath/cafebabe/badge.svg?branch=master)](https://coveralls.io/github/Trugath/cafebabe?branch=master)

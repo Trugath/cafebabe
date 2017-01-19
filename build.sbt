@@ -2,11 +2,12 @@ name := "Cafebabe"
 
 version := "1.2"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
 
-libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.11.8"
+libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.12.1"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.1"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 
 fork in Test := true
 
